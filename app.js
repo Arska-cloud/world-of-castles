@@ -60,7 +60,7 @@ app.delete('/castles/:id', async (req, res) => {
 // Show route
 app.get('/castles/:id', async (req, res) => {
     const castle = await Castle.findById(req.params.id);
-    res.render('castle/show', {castle});
+    res.render('castles/show', {castle});
 });
 
 
