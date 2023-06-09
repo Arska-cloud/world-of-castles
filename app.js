@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const Campground = require('./models/campground');
+const Castle = require('./models/castle');
 const methodOverride = require('method-override');
 
 const app = express();
@@ -10,7 +10,7 @@ app.use(methodOverride('_method'));
 
 // Server port, host & database connection
 app.listen(3000, () => {console.log('Serving on port 3000')});
-mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp', {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb://127.0.0.1:27017/world-of-castles', {useNewUrlParser: true, useUnifiedTopology: true})
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, "connection error"));
@@ -25,42 +25,42 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.get('/campgrounds', async (req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', {campgrounds});
+app.get('/castles', async (req, res) => {
+    const castles = await Castle.find({});
+    res.render('castles/index', {castles});
 });
 
-app.get('/campgrounds/new', (req, res) => {
-    res.render('campgrounds/new');
+app.get('/castles/new', (req, res) => {
+    res.render('castles/new');
 });
 
 // Create, Edit, Update and delete routes
-app.post('/campgrounds', async (req, res) => {
-    const campground = new Campground(req.body.campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`)
+app.post('/castles', async (req, res) => {
+    const castle = new Castle(req.body.castle);
+    await castle.save();
+    res.redirect(`/castles/${castle._id}`);
 });
 
-app.get('/campgrounds/:id/edit', async (req, res) => {
-    const campground = await Campground.findById(req.params.id);
-    res.render('campgrounds/edit', {campground});
+app.get('/castles/:id/edit', async (req, res) => {
+    const castle = await Castle.findById(req.params.id);
+    res.render('castles/edit', {castle});
 });
 
-app.put('/campgrounds/:id', async (req, res) => {
+app.put('/castles/:id', async (req, res) => {
     const {id} = req.params;
-    const campground = await Campground.findByIdAndUpdate(id,{...req.body.campground});
-    res.redirect(`/campgrounds/${campground._id}`);
+    const castle = await Castle.findByIdAndUpdate(id,{...req.body.castle});
+    res.redirect(`/castles/${castle._id}`);
 })
 
-app.delete('/campgrounds/:id', async (req, res) => {
+app.delete('/castles/:id', async (req, res) => {
     const {id} = req.params;
-    await Campground.findByIdAndDelete(id);
-    res.redirect('/campgrounds');
+    await Castle.findByIdAndDelete(id);
+    res.redirect('/castles');
 })
 // Show route
-app.get('/campgrounds/:id', async (req, res) => {
-    const campground = await Campground.findById(req.params.id);
-    res.render('campgrounds/show', {campground});
+app.get('/castles/:id', async (req, res) => {
+    const castle = await Castle.findById(req.params.id);
+    res.render('castle/show', {castle});
 });
 
 
