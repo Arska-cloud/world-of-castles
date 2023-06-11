@@ -1,20 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= castle.title %></title>
-</head>
-<body>
-    <h1><%= castle.title %></h1>
-    <h2><%= castle.location %></h2>
-    <footer>
-        <a href="/castles">All Castles</a>
-        <a href="/castles/<%=castle._id%>/edit">Edit Castle</a>
-        <form action="/castles/<%=castle._id%>?_method=DELETE" method="POST">
-            <button>DELETE</button>
-        </form>       
-    </footer>
-</body>
-</html>
+<% layout('layouts/base') %>
+
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class="card mb-3">
+            <img src="<%= castle.image %>" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title"><%= castle.title %></h5>
+              <p class="card-text"><%= castle.description %></p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item text-muted"><%= castle.location %></li>
+            </ul>
+            <div class="card-body">
+                <a class="btn btn-primary" href="/castles" class="card-link">All Castles</a>
+                <a class="btn btn-warning" href="/castles/<%=castle._id%>/edit" class="card-link">Edit</a>
+                <form class="d-inline" action="/castles/<%=castle._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>                  
+            </div>
+          </div>
+    </div>
+</div>

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const Castle = require('./models/castle');
 const methodOverride = require('method-override');
+const ejsMate = require('ejs-mate');
 
 const app = express();
 app.use(express.urlencoded({ extended: true}));
@@ -17,6 +18,7 @@ db.on('error', console.error.bind(console, "connection error"));
 db.once('open', () => {console.log('Database connected')});
 
 // Connecting views engine and folder
+app.engine('ejs',ejsMate);
 app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'views'));
 

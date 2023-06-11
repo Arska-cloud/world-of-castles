@@ -1,20 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Castles</title>
-</head>
-<body>
-    <h1>All Castles!</h1>
-    <div>
-        <a href="/castles/new">Add Castle</a>
-    </div>
-    <ul>
+<% layout('layouts/base') %>
+<div class="mb-3">
+    <h1 class="d-inline me-2">All Castles in the World</h1>
+    <a class="btn btn-sm btn-primary"href="/castles/new">Add Castle</a>
+</div>
         <% for (let castle of castles) {%>
-            <li><a href="/castles/<%= castle._id %>"><%= castle.title %></a></li>
+          <div class="card" mb-3>
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="<%= castle.image %>" alt="" class="img-fluid">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= castle.title %></h5>
+                        <p class="card-text"><%= castle.description %></p>
+                        <p class="card-text">
+                            <small class="text-muted"><%= castle.location %></small>
+                        </p>
+                        <a href="castles/<%= castle._id %>" class="btn btn-primary">View <%= castle.title %></a>
+                    </div>
+                </div>
+            </div>
+          </div>  
         <% } %>
-    </ul>
-</body>
-</html>
+
