@@ -5,9 +5,12 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const Joi = require('joi');
 const Castle = require('./models/castle');
+const Review = require('./models/review');
 const wrapAsync = require('./utils/wrapAsync');
 const ExpressError = require('./utils/ExpressError');
-const {castleSchema} = require('./schemas.js')
+const {castleSchema} = require('./schemas.js');
+const {reviewSchema} = require('./schemas.js');
+
 
 const app = express();
 app.use(express.urlencoded({ extended: true}));
@@ -37,6 +40,15 @@ const validateCastle = (req, res, next) => {
         next();
     }
 }
+const validateReview = (req, res, next) => {
+    const {error} = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
 
 // Routes
 app.get('/', (req, res) => {
@@ -52,7 +64,7 @@ app.get('/castles/new', (req, res) => {
     res.render('castles/new');
 });
 
-// Create, Edit, Update and delete routes
+// Create, Edit, Update and delete routes for castles
 app.post('/castles', validateCastle, wrapAsync(async (req, res) => {
     const castle = new Castle(req.body.castle);
     await castle.save();
@@ -75,12 +87,31 @@ app.delete('/castles/:id', wrapAsync(async (req, res) => {
     await Castle.findByIdAndDelete(id);
     res.redirect('/castles');
 }));
+
 // Show route
 app.get('/castles/:id', wrapAsync(async (req, res) => {
-    const castle = await Castle.findById(req.params.id);
+    const castle = await Castle.findById(req.params.id).populate('reviews');
     res.render('castles/show', {castle});
 }));
 
+// Create & delete routes for reviews
+app.post('/castles/:id/reviews', validateReview, wrapAsync(async (req, res) => {
+    const castle = await Castle.findById(req.params.id);
+    const review = new Review(req.body.review);
+    castle.reviews.push(review);
+    await review.save();
+    await castle.save();
+    res.redirect(`/castles/${castle._id}`);
+}));
+
+app.delete('/castles/:id/reviews/:reviewId', wrapAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Castle.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/castles/${id}`);
+}));
+
+//Error catchers
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
 });
@@ -90,4 +121,3 @@ app.use((err, req, res, next) => {
     if (!err.message) err.message = 'It looks like you got lost on your way to Santiago!'
     res.status(statusCode).render('error', {err});
 });
-
