@@ -20,7 +20,7 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const sessionConfig = {
-  secret: "ñäñéñíñôñü",
+  secret: "notasecret",
   resave: false,
   saveUninitialized: true,
   cookie: {
