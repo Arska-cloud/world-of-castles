@@ -3,7 +3,7 @@ const Review = require('./review');
 const Schema = mongoose.Schema;
 
 const CastleSchema = new Schema({
-    image: String,
+    images: [{ url: String, filename: String }],
     title: String,
     location: String,
     description: String,

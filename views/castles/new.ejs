@@ -1,33 +1,33 @@
 <% layout('layouts/base') %>
-<div class="row">
-    <h1 class="text-center">New Castle</h1>
-    <div class="col-6 offset-3">
-        <form action="/castles" method="POST" novalidate class="needs-validation">
-            <div class="mb-3">
-                <label class="form-label" for="image">Image Url</label>
-                <input class="form-control" type="text" id="image" name="castle[image]">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="title">Name</label>
-                <input class="form-control" type="text" id="title" name="castle[title]" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="location">Location</label>
-                <input class="form-control" type="text" id="location" name="castle[location]" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" type="text" id="description" name="castle[description]"></textarea>
-            </div>
-            <div class="mb-3">
-                <button class="btn btn-success">Add Castle</button>
-                <a class="btn btn-primary" href="/castles">All Castles</a>
-            </div>
-            
-            <footer>
-                
-            </footer>
-        </form>
+    <div class="row">
+        <h1 class="text-center">New Castle</h1>
+        <div class="col-6 offset-3">
+            <form action="/castles" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="file" name="image" id="" multiple>
+                    <!-- <label class="form-label" for="image">Image Url</label>
+                    <input class="form-control" type="text" id="image" name="castle[image]"> -->
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="title">Name</label>
+                    <input class="form-control" type="text" id="title" name="castle[title]" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="castle[location]" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="castle[description]"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-success">Add Castle</button>
+                    <a class="btn btn-primary" href="/castles">All Castles</a>
+                </div>
+
+                <footer>
+
+                </footer>
+            </form>
+        </div>
     </div>
-</div>
-    

@@ -11,6 +11,7 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createCastle = async (req, res) => {
     const castle = new Castle(req.body.castle);
+    castle.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
     castle.author = req.user._id;
     await castle.save();
     req.flash('success', 'Successfully built a castle.');
@@ -29,6 +30,9 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateCastle = async (req, res) => {
     const { id } = req.params;
     const castle = await Castle.findByIdAndUpdate(id, { ...req.body.castle });
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    castle.images.push(...imgs);
+    await castle.save();
     req.flash('success', 'Successfully upgraded the castle.');
     res.redirect(`/castles/${castle._id}`);
 };
