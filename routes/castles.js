@@ -1,8 +1,9 @@
 const express = require("express");
+const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync");
 const Castle = require("../models/castle");
 const { castleSchema } = require("../schemas.js");
-const router = express.Router();
+const { isLoggedIn } = require("../middleware")
 const ExpressError = require("../utils/ExpressError");
 const Joi = require("joi");
 
@@ -24,12 +25,12 @@ router.get("/", wrapAsync(async (req, res) => {
 })
 );
 
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("castles/new");
 });
 
 // Create, Edit, Update and delete routes for castles
-router.post("/", validateCastle, wrapAsync(async (req, res) => {
+router.post("/", isLoggedIn, validateCastle, wrapAsync(async (req, res) => {
   const castle = new Castle(req.body.castle);
   await castle.save();
   req.flash('success', 'Successfully built a castle.');
@@ -37,7 +38,7 @@ router.post("/", validateCastle, wrapAsync(async (req, res) => {
 })
 );
 
-router.get("/:id/edit", wrapAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, wrapAsync(async (req, res) => {
   const castle = await Castle.findById(req.params.id);
   if (!castle) {
     req.flash('error', 'Seems like the castle is no longer there!');
@@ -47,7 +48,7 @@ router.get("/:id/edit", wrapAsync(async (req, res) => {
 })
 );
 
-router.put("/:id", validateCastle, wrapAsync(async (req, res) => {
+router.put("/:id", isLoggedIn, validateCastle, wrapAsync(async (req, res) => {
   const { id } = req.params;
   const castle = await Castle.findByIdAndUpdate(id, { ...req.body.castle });
   req.flash('success', 'Successfully updated the castle.');

@@ -6,12 +6,16 @@ const ejsMate = require("ejs-mate");
 const Joi = require("joi");
 const session = require("express-session");
 const flash = require("connect-flash");
-// utils
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+// utils & models
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
+const User = require("./models/user");
 // routers
-const castles = require("./routes/castles");
-const reviews = require("./routes/reviews");
+const castleRoutes = require("./routes/castles");
+const reviewRoutes = require("./routes/reviews");
+const userRoutes = require("./routes/users");
 // apps
 const app = express();
 
@@ -20,7 +24,7 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const sessionConfig = {
-  secret: "ñäñéñíñôñü",
+  secret: "notasecret",
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -32,7 +36,14 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
@@ -59,8 +70,9 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // Routes
-app.use("/castles", castles);
-app.use("/castles/:id/reviews", reviews);
+app.use("/castles", castleRoutes);
+app.use("/castles/:id/reviews", reviewRoutes);
+app.use("/", userRoutes);
 
 app.get("/", (req, res) => {
   res.render("home");
