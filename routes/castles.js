@@ -2,66 +2,24 @@ const express = require("express");
 const router = express.Router();
 //utils & models
 const wrapAsync = require("../utils/wrapAsync");
-const Castle = require("../models/castle");
-//middleware
-const { isLoggedIn, verifyAuthor, validateCastle } = require("../middleware")
+//middleware & controllers
+const { isLoggedIn, verifyAuthor, validateCastle } = require("../middleware");
+const castles = require('../controllers/castles');
 
-// Routes
-router.get("/", wrapAsync(async (req, res) => {
-  const castles = await Castle.find({});
-  res.render("castles/index", { castles });
-})
-);
-// Create form route
-router.get("/new", isLoggedIn, (req, res) => {
-  res.render("castles/new");
-});
+// Show all castles and create castle routes
+router.route('/')
+    .get(wrapAsync(castles.index))
+    .post(isLoggedIn, validateCastle, wrapAsync(castles.createCastle));
 
-// Create post route
-router.post("/", isLoggedIn, validateCastle, wrapAsync(async (req, res) => {
-  const castle = new Castle(req.body.castle);
-  castle.author = req.user._id;
-  await castle.save();
-  req.flash('success', 'Successfully built a castle.');
-  res.redirect(`/castles/${castle._id}`);
-})
-);
+router.get("/new", isLoggedIn, castles.renderNewForm);
+
+// Show castle, update and delete castle routes
+router.route('/:id')
+    .get(wrapAsync(castles.showCastle))
+    .put(isLoggedIn, verifyAuthor, validateCastle, wrapAsync(castles.updateCastle))
+    .delete(isLoggedIn, verifyAuthor, wrapAsync(castles.deleteCastle));
+
 // Edit form route
-router.get("/:id/edit", isLoggedIn, verifyAuthor, wrapAsync(async (req, res) => {
-  const castle = await Castle.findById(req.params.id);
-  if (!castle) {
-    req.flash('error', 'Seems like the castle is no longer there!');
-    return res.redirect("/castles");
-  }
-  res.render("castles/edit", { castle });
-})
-);
-// Update route
-router.put("/:id", isLoggedIn, verifyAuthor, validateCastle, wrapAsync(async (req, res) => {
-  const { id } = req.params;
-  const castle = await Castle.findByIdAndUpdate(id, { ...req.body.castle });
-  req.flash('success', 'Successfully updated the castle.');
-  res.redirect(`/castles/${castle._id}`);
-})
-);
-// Delete route
-router.delete("/:id", isLoggedIn, verifyAuthor, wrapAsync(async (req, res) => {
-  const { id } = req.params;
-  await Castle.findByIdAndDelete(id);
-  req.flash('success', 'Successfully demolished the castle.');
-  res.redirect("/castles");
-})
-);
-
-// Show route
-router.get("/:id", wrapAsync(async (req, res) => {
-  const castle = await Castle.findById(req.params.id).populate({ path: 'reviews', populate: { path: 'author' } }).populate('author');
-  if (!castle) {
-    req.flash('error', 'Seems like the castle is no longer there!');
-    return res.redirect("/castles");
-  }
-  res.render("castles/show", { castle });
-})
-);
+router.get("/:id/edit", isLoggedIn, verifyAuthor, wrapAsync(castles.renderEditForm));
 
 module.exports = router;
