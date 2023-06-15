@@ -1,4 +1,7 @@
 const Castle = require('../models/castle');
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapboxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapboxToken });
 const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
@@ -11,7 +14,9 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createCastle = async (req, res) => {
+    const geoData = await geocoder.forwardGeocode({ query: req.body.castle.location, limit: 1 }).send()
     const castle = new Castle(req.body.castle);
+    castle.geometry = geoData.body.features[0].geometry;
     castle.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
     castle.author = req.user._id;
     await castle.save();

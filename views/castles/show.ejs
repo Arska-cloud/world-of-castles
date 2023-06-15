@@ -52,6 +52,7 @@
     </div>
 
     <div class="col-6">
+      <div id='map' style='width: 100%; height: 300px;' class="mb-3"></div>
       <% if(currentUser){ %>
         <form class="mb-3 needs-validation" action="/castles/<%=castle._id%>/reviews" method="POST" novalidate>
           <div class="mb-3">
@@ -100,3 +101,12 @@
     </div>
   </div>
   </div>
+
+
+  <script>
+    const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+    const castle = <%- JSON.stringify(castle) %>
+  </script>
+
+
+  <script src="/javascripts/showPageMap.js"></script>
