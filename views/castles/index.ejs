@@ -1,4 +1,5 @@
 <% layout('layouts/base') %>
+    <div id="map" style="width: 100%; height: 500px"></div>
     <div class="mb-3">
         <h1 class="d-inline me-2">All Castles in the World</h1>
         <a class="btn btn-sm btn-primary" href="/castles/new">Add Castle</a>
@@ -8,10 +9,10 @@
             <div class="row">
                 <div class="col-md-4">
                     <% if(castle.images.length) {%>
-                    <img src="<%= castle.images[0].url %>" alt="" class="img-fluid">
-                    <% } else { %>
-                        <img src="" alt="">
-                        <% } %>
+                        <img src="<%= castle.images[0].url %>" alt="" class="img-fluid">
+                        <% } else { %>
+                            <img src="" alt="">
+                            <% } %>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
@@ -32,3 +33,9 @@
             </div>
         </div>
         <% } %>
+
+            <script>
+                const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+                const castles = {features: <%- JSON.stringify(castles) %>}
+            </script>
+            <script src="/javascripts/clusterMap.js"></script>

@@ -11,6 +11,8 @@ ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_300');
 })
 
+const opts = { toJSON: { virtuals: true } };
+
 const CastleSchema = new Schema({
     title: String,
     location: String,
@@ -22,7 +24,11 @@ const CastleSchema = new Schema({
     },
     author: { type: Schema.Types.ObjectId, ref: 'User' },
     reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
-});
+}, opts);
+
+CastleSchema.virtual('properties.popUpMarkup').get(function () {
+    return `<strong><a href="/castles/${this._id}">${this.title}</a><strong><p>${this.location}</p>`
+})
 
 CastleSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
