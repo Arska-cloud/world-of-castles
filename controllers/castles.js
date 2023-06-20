@@ -24,6 +24,15 @@ module.exports.createCastle = async (req, res) => {
     res.redirect(`/castles/${castle._id}`);
 };
 
+module.exports.showCastle = async (req, res) => {
+    const castle = await Castle.findById(req.params.id).populate({ path: 'reviews', populate: { path: 'author' } }).populate('author');
+    if (!castle) {
+        req.flash('error', 'Seems like the castle is no longer there!');
+        return res.redirect("/castles");
+    }
+    res.render("castles/show", { castle });
+};
+
 module.exports.renderEditForm = async (req, res) => {
     const castle = await Castle.findById(req.params.id);
     if (!castle) {
@@ -49,14 +58,7 @@ module.exports.updateCastle = async (req, res) => {
     res.redirect(`/castles/${castle._id}`);
 };
 
-module.exports.showCastle = async (req, res) => {
-    const castle = await Castle.findById(req.params.id).populate({ path: 'reviews', populate: { path: 'author' } }).populate('author');
-    if (!castle) {
-        req.flash('error', 'Seems like the castle is no longer there!');
-        return res.redirect("/castles");
-    }
-    res.render("castles/show", { castle });
-};
+
 
 module.exports.deleteCastle = async (req, res) => {
     const { id } = req.params;
