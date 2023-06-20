@@ -12,8 +12,8 @@
       </div>
       <div class="navbar-nav ms-auto">
         <% if(!currentUser) { %>
-          <a href="/login" class="nav-link">Log In</a>
-          <a href="/register" class="nav-link">Sign Up</a>
+          <a href="#offcanvasLogin" data-bs-toggle="offcanvas" class="nav-link">Log In</a>
+          <a href="/register" class="nav-link">Register</a>
           <% } else { %>
             <a href="/logout" class="nav-link">Log Out</a>
             <% } %>
@@ -21,3 +21,26 @@
     </div>
   </div>
 </nav>
+
+<div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasLogin" aria-labelledby="Login">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasLogin">Login</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="col-8 offset-2 mt-5">
+    <form action="/login" method="POST" class="needs-validation mt-5" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-control" type="text" id="username" name="username" autofocus required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-control" type="password" id="password" name="password" required>
+
+      </div>
+      <button class="btn btn-success btn-block">Login</button>
+    </form>
+  </div>
+</div>
+</div>

@@ -1,41 +1,37 @@
 <% layout('layouts/base') %>
-    <div class="row">
-        <h1 class="text-center">Edit Castle</h1>
-        <div class="col-6 offset-3">
-            <form action="/castles/<%=castle._id%>?_method=PUT" method="POST" novalidate class="needs-validation"
-                enctype="multipart/form-data">
-                <div class="mb-3">
-                    <% castle.images.forEach(function(img, i){ %>
-                        <img src="<%=img.thumbnail%>" class="img-thumbnail" alt="">
-                        <div class="form-check-inline">
-                            <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
-                        </div>
-                        <label for="image-<%=i%>">Delete</label>
-                        <% }) %>
-                </div>
-                <div class="mb-3">
-                    <label for="image" class="form-label">Images</label>
-                    <input class="form-control" type="file" id="image" name="image" multiple>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="title">Name</label>
-                    <input class="form-control" type="text" id="title" name="castle[title]" value="<%=castle.title%>"
-                        required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" id="location" name="castle[location]"
-                        value="<%=castle.location%>" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description"
-                        name="castle[description]"><%=castle.description%></textarea>
-                </div>
-                <div class="mb-3">
-                    <button class="btn btn-success">Edit Castle</button>
-                    <a class="btn btn-primary" href="/castles/<%=castle._id%>">Back to Castle</a>
-                </div>
-            </form>
-        </div>
+<div class="row" id="column">
+    <h1 class="text-center">Edit Castle</h1>
+    <div class="col-8 offset-2">
+        <form action="/castles/<%=castle._id%>?_method=PUT" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+            <div class="mb-3">
+                <% castle.images.forEach(function(img, i){ %>
+                    <img src="<%=img.thumbnail%>" class="img-thumbnail" alt="">
+                    <div class="form-check-inline">
+                        <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+                    </div>
+                    <label for="image-<%=i%>">Delete</label>
+                <% }) %>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Images</label>
+                <input class="form-control" type="file" id="image" name="image" multiple>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="title">Name</label>
+                <input class="form-control" type="text" id="title" name="castle[title]" value="<%=castle.title%>" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="location">Location</label>
+                <input class="form-control" type="text" id="location" name="castle[location]" value="<%=castle.location%>" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <textarea class="form-control" type="text" id="description" name="castle[description]"><%=castle.description%></textarea>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-success">Edit Castle</button>
+                <a class="btn btn-primary" href="/castles/<%=castle._id%>">Back to Castle</a>
+            </div>
+        </form>
     </div>
+</div>

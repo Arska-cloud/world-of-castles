@@ -1,7 +1,29 @@
 <% layout('layouts/base') %>
   <link rel="stylesheet" href="/stylesheets/stars.css">
 
-  <div class="row">
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="deleteModalLabel">Delete castle</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            You are about to delete your castle, are you sure you want to proceed?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, go back</button>
+            <form class="d-inline" action="/castles/<%=castle._id%>?_method=DELETE" method="POST">
+              <button class="btn btn-danger">Yes, delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+  <div class="row" id="column">
     <div class="col-6">
       <div id="castleCarousel" class="carousel slide mb-3" data-ride="carousel">
         <div class="carousel-inner">
@@ -43,16 +65,14 @@
         <% if(currentUser && castle.author.equals(currentUser._id)) { %>
           <div class="card-body">
             <a class="btn btn-warning" href="/castles/<%=castle._id%>/edit" class="card-link">Edit</a>
-            <form class="d-inline" action="/castles/<%=castle._id%>?_method=DELETE" method="POST">
-              <button class="btn btn-danger">Delete</button>
-            </form>
+              <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
           </div>
           <% } %>
       </div>
     </div>
 
     <div class="col-6">
-      <div id='map' style='width: 100%; height: 300px;' class="mb-3"></div>
+      <div id="map" class="mb-3"></div>
       <% if(currentUser){ %>
         <form class="mb-3 needs-validation" action="/castles/<%=castle._id%>/reviews" method="POST" novalidate>
           <div class="mb-3">
@@ -92,8 +112,8 @@
                 </h6>
                 <% if(currentUser && review.author.equals(currentUser._id)) { %>
                   <form action="/castles/<%=castle._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </form>
+                    <button class="btn btn-sm btn-danger">Delete</button> 
+                    </form>
                   <% } %>
               </div>
             </div>
@@ -101,7 +121,6 @@
     </div>
   </div>
   </div>
-
 
   <script>
     const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
