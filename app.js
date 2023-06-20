@@ -47,7 +47,7 @@ const sessionConfig = {
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    /* secure: true, */
+    secure: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
@@ -118,7 +118,7 @@ app.listen(3000, () => {
   console.log("Serving on port 3000");
 });
 
-mongoose.connect("mongodb://127.0.0.1:27017/justcastles", {
+mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
