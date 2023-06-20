@@ -7,15 +7,15 @@ const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const Joi = require("joi");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require('helmet');
+const MongoStore = require('connect-mongo');
+const dbUrl = process.env.DB_URL
 // utils & models
-const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
 const User = require("./models/user");
 // routers
@@ -31,7 +31,16 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 app.use(helmet());
 
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+      secret: 'alsonotasecret!'
+  }
+});
+
 const sessionConfig = {
+  store,
   name: '_yklt',
   secret: "notasecret",
   resave: false,
@@ -108,6 +117,7 @@ app.use((req, res, next) => {
 app.listen(3000, () => {
   console.log("Serving on port 3000");
 });
+
 mongoose.connect("mongodb://127.0.0.1:27017/justcastles", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
