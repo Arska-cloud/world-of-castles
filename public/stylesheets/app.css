@@ -18,6 +18,7 @@ body {
 }
 
 #register-column {
+    align-content: auto;
     color: white;
     background-color: rgba(33, 37, 41, 0.9);
     border: 0.5rem #212529 solid;
