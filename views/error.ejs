@@ -1,13 +1,18 @@
 <% layout('layouts/base')%>
 
-<div class="container d-flex justify-content-center align-items-center mt-5">
-    <div class="row">
-        <div class="col col-xl-auto" id="register-column">
-                <h3 class="mb-5 mt-4">Something went wrong!</h3>
-                <img src="https://res.cloudinary.com/dvysdge6i/image/upload/c_scale,w_800/v1687284705/JustCastles/michal-matlon-VrhE5ry2UZM-unsplash_kdp03o.jpg" alt="">
-                <h5 class="mt-5">It seems like you might have gotten lost in your way to Santiago</h5>
-                <button class="btn btn-primary" href="/castles">Return to the map</button>
+    <div class="container d-flex justify-content-center align-items-center mt-5">
+        <div class="row">
+            <div class="col col-xl-auto">
+                <div class="card text-bg-dark mb-3">
+                    <div class="card-body">
+                        <img class="card-img-top"
+                            src="https://res.cloudinary.com/dvysdge6i/image/upload/c_scale,w_550/v1687284705/JustCastles/michal-matlon-VrhE5ry2UZM-unsplash_kdp03o.jpg"
+                            alt="">
+                        <h3 class="mb-2 mt-4 card-title">Oh no! It looks like you got lost!</h3>
+                        <p class="card-text">This place is very pretty though, but it definitely is not Santiago!</p>
+                        <a class="btn btn-primary" href="/castles">Return to the trail</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
