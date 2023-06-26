@@ -14,7 +14,7 @@ const LocalStrategy = require("passport-local");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require('helmet');
 const MongoStore = require('connect-mongo');
-const dbUrl = process.env.DB_URL
+const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/justcastles"
 // utils & models
 const ExpressError = require("./utils/ExpressError");
 const User = require("./models/user");
