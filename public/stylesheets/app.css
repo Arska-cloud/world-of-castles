@@ -20,7 +20,7 @@ body {
 #column {
     background-color: white;
     border: 1rem white solid;
-    height: 100vh;
+    height: 100%;
 }
 
 input[type="file"] {
