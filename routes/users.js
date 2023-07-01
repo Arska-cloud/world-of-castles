@@ -18,4 +18,12 @@ router.route('/login')
 // Logout route
 router.get('/logout', users.logout);
 
+// Password reset routes
+router.get('/forgot', users.forgot);
+router.post('/reset/resetRequest', users.resetRequest);
+
+/* router.post("/auth/signup", users.signUp); */
+router.get('/reset/:token', users.reset);
+router.post('/reset/resetPassword', users.resetPasswordController);
+
 module.exports = router;

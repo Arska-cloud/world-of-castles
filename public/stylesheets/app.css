@@ -14,13 +14,13 @@ body {
         url("https://res.cloudinary.com/dvysdge6i/image/upload/v1686842494/JustCastles/wallace-bentt-4j8_dFORaNQ-unsplash_lmpgq2.jpg");
     background-size: cover;
     background-position: center;
-    box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
+    background-attachment: fixed;
 }
 
 #column {
     background-color: white;
     border: 1rem white solid;
-    height: 100vh;
+    height: 100%;
 }
 
 input[type="file"] {

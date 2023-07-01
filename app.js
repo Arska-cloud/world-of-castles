@@ -15,6 +15,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require('helmet');
 const MongoStore = require('connect-mongo');
 const dbUrl = process.env.DB_URL
+const cors = require("cors");
 // utils & models
 const ExpressError = require("./utils/ExpressError");
 const User = require("./models/user");
@@ -30,6 +31,7 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 app.use(helmet());
+app.use(cors());
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,

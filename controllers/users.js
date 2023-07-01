@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const { signup, requestPasswordReset, resetPassword } = require("../services/auth");
 
 module.exports.renderRegister = (req, res) => {
     res.render('users/register')
@@ -38,4 +39,46 @@ module.exports.logout = (req, res, next) => {
         req.flash('success', 'Goodbye!');
         res.redirect('/castles');
     });
+};
+
+// Controllers for password reset, they need refactoring
+
+module.exports.forgot = (req, res) => {
+    res.render('users/forgot');
+}
+
+module.exports.reset = (req, res) => {
+    const { token } = req.params;
+    res.render(`users/reset/${token}`, { token });
+}
+
+module.exports.signUp = async (req, res, next) => {
+    const signupService = await signup(req.body);
+    return res.json(signupService);
+};
+
+module.exports.resetRequest = async (req, res, next) => {
+    try {
+        const link = await requestPasswordReset(req.body.email);
+        req.flash('success', 'Reset email successfully sent!');
+        res.redirect('/login');
+    } catch (e) {
+        req.flash('error', e.message);
+        res.redirect('/forgot');
+    }
+};
+
+module.exports.resetPasswordController = async (req, res, next) => {
+    try {
+        await resetPassword(
+            req.body.userId,
+            req.body.token,
+            req.body.password
+        );
+        req.flash('success', 'Reset email successfully sent!');
+        res.redirect('/login');
+    } catch (e) {
+        req.flash('error', e.message);
+        res.redirect('/login');
+    }
 };
